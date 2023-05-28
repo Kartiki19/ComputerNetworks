@@ -1,13 +1,13 @@
 
 #include "clientServer.h"
-#include <stdio.h>
-#include <strings.h>
-#include <stdint.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <strings.h>
+//#include <stdint.h>
+//#include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+//#include <string.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <iostream>
 

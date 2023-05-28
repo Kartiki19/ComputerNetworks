@@ -1,12 +1,12 @@
 #include "clientServer.h"
-#include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <iostream>
 
 using namespace std;
 
-DataPacket getDataPacket(){
+/// Create Data Packet
+DataPacket createDataPacket(){
     DataPacket dataPacket;
 	dataPacket.startOfPacketId = START_PACKET_ID;
 	dataPacket.clientId = 0x01;
@@ -58,7 +58,7 @@ int main()
     int segmentNumber = 1;
     while(fgets(line, sizeof(line), fileptr) != NULL)
     {    
-        DataPacket dataPacket = getDataPacket();
+        DataPacket dataPacket = createDataPacket();
         dataPacket.segmentNumber = static_cast<uint8_t>(segmentNumber);
         cout << "\n******************* Sending New Packet : " << segmentNumber << " *******************" << endl;
         strcpy(dataPacket.payload, line);
@@ -132,7 +132,7 @@ int main()
             }
         }
 
-        if(iteration >= MAX_ITERATIONS){
+        if(iteration >= MAX_ITERATIONS){ /// After re-sending the packet 3 times, the ACK is not received
             cout << "\n************** SERVER DID NOT RESPOND **************" << endl;
             exit(0);
         }
