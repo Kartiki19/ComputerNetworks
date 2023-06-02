@@ -138,6 +138,6 @@ int main()
         }
         segmentNumber++;
     }
-
+    fclose(fileptr);
     return 0;
 }
