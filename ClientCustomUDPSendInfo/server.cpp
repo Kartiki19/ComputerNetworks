@@ -44,7 +44,6 @@ int main(){
     /// Assign IP and Port for Server
     sockaddr_in serverAddress;
     socklen_t serverAddressSize;
-    sockaddr_storage serverStorage;
 
 	bzero(&serverAddress, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
