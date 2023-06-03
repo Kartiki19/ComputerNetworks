@@ -1,14 +1,4 @@
-//#include <iostream>
 #include "clientServer.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <sys/time.h>
-#include <stdint.h>
-#include <string.h>
-#include <unistd.h>
 
 using namespace std;
 
@@ -16,6 +6,7 @@ PacketFormat createPacket(){
     PacketFormat packet;
     packet.startOfPacketId = 0xFFFF;
     packet.clientId = 0xFF;
+    packet.type = Status::ACC_PERMISSION;
     packet.endOfPacketId = 0xFFFF;
     return packet;
 }
@@ -64,7 +55,7 @@ int main(){
     char line[30]; /// Characters in 1 line of input file ( Subscriber Number + technology)
     int segmentNum = 1; /// To keep track of segments
     while(fgets(line, sizeof(line), inputFile)){
-        cout << "\n******************* New Request : "<< segmentNum <<"*******************\n";
+        cout << "\n******************* New Request : "<< segmentNum <<" *******************\n";
         char* sourceSubscriberNum = strtok(line," ");
         requestPacket.length = strlen(sourceSubscriberNum);
         requestPacket.sourceSubscriberNum = atoi(sourceSubscriberNum);
@@ -77,7 +68,8 @@ int main(){
         printPacket(requestPacket);
 
         int iteration = 0;
-        while(iteration < MAX_ITERATIONS){
+        bool sentSuccessfully = false;
+        while(iteration < MAX_ITERATIONS && !sentSuccessfully){
             /// Sending Request Packet to the Server
             sendto(sock, &requestPacket,sizeof(PacketFormat), 0, (struct sockaddr *)&serverAddress, serverAddressSize);
             iteration++;
@@ -86,17 +78,23 @@ int main(){
             PacketFormat responsePacket;
 			int received = recvfrom(sock, &responsePacket, sizeof(PacketFormat), 0, NULL, NULL);
 			if(received <= 0){
-                cout << "\n********* ACK not received *********" << endl;
-                //sentSuccessfully = false;
+                cout << "\n••••• ACK not received •••••" << endl;
+                sentSuccessfully = false;
             }
-            else if(responsePacket.type == Status::NOT_PAID){
-                cout << "Subscriber has not paid !" << endl;
-            }
-            else if (responsePacket.type == Status::NOT_EXIST){
-                cout << "Subscriber does not exist !" << endl;
-            }
-            else if (responsePacket.type == Status::ACCESS_OK){
-                cout << "Subscriber has paid, permitted access to the network !" << endl;
+            else {
+                if(responsePacket.type == Status::NOT_PAID){
+                    cout << "\n••••• Subscriber has not paid ! •••••" << endl;
+                }
+                else if (responsePacket.type == Status::NOT_EXIST){
+                    cout << "\n••••• Subscriber Does Not Exist ! •••••" << endl;
+                }
+                else if (responsePacket.type == Status::ACCESS_OK){
+                    cout << "\n••••• Subscriber has paid, permitted access to the network ! •••••" << endl;
+                }
+                else if(responsePacket.type == Status::TECHNOLOGY_MISMATCH){
+                     cout << "\n••••• Technology of Subscriber did not Matched ! •••••" << endl;
+                }
+                sentSuccessfully = true;
             }
         }
 

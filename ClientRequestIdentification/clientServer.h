@@ -1,8 +1,10 @@
-
 #ifndef CLIENTSERVER_H
 #define CLIENTSERVER_H
 #include <cstdint> 
 #include <iostream>
+#include <netinet/in.h>
+#include <unistd.h>
+
 /// Protocol Premitives
 #define START_PACKET_ID 0xFFFF
 #define END_PACKET_ID 0xFFFF
@@ -15,9 +17,11 @@
 
 /// Identification Types
 enum Status {
-    ACCESS_OK = 0xFFFB,
+    ACC_PERMISSION = 0xFFF8,
     NOT_PAID = 0xFFF9,
-    NOT_EXIST = 0xFFFA
+    NOT_EXIST = 0xFFFA,
+    ACCESS_OK = 0xFFFB,
+    TECHNOLOGY_MISMATCH = 0xFFFC
 };
 
 /// Structure of a Packet
