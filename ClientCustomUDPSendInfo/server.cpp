@@ -1,8 +1,4 @@
-
 #include "clientServer.h"
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <iostream>
 
 // Create Acknowledgement Packet
 AckPacket createACKPacket(DataPacket dp) {
@@ -58,7 +54,7 @@ int main(){
 
     uint8_t expectedSegmentNumber = 1;
     bool lastPacketReceived = false;
-    while(true && !lastPacketReceived){
+    while(!lastPacketReceived){
         std::cout << "\n************************* Server is waiting for new Packet **************************" <<  std::endl;
         /// Wait for data packet
         DataPacket packet{};
@@ -117,7 +113,5 @@ int main(){
             }
         }
     }
-
-
     return 0;
 }

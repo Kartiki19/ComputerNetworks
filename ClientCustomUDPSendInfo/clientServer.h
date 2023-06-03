@@ -1,8 +1,12 @@
-
 #ifndef CLIENTSERVER_H
 #define CLIENTSERVER_H
+
 #include <cstdint> 
 #include <iostream>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <iostream>
+
 /// Protocol Premitives
 #define START_PACKET_ID 0xFFFF
 #define END_PACKET_ID 0xFFFF

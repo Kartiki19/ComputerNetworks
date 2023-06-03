@@ -1,8 +1,4 @@
 #include "clientServer.h"
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <iostream>
-
 using namespace std;
 
 /// Create Data Packet
